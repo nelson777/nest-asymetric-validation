@@ -5,6 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserJwtPayload } from 'src/dataObjects/user-jwt-payload.interface';
 import { User } from 'src/dataObjects/user.entity';
 import { DbRepo } from 'src/dataObjects/dbRepo';
+import { readFileSync } from 'node:fs';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -12,11 +13,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		private dbRepo: DbRepo,
 		private configService: ConfigService,
 	) {
-		let publicKey = configService.get<string>('JWT_PUBLIC_KEY_BASE64', '');
-		console.log('jwts publicKey', publicKey);
-		//		let publicKey = configService.get<string>('JWT_SECRET', '');
 		super({
-			secretOrKey: publicKey,
+			secretOrKey: configService.get<string>('JWT_PUBLIC_KEY_BASE64', ''),
 			jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 			ignoreExpiration: false,
 			algorithms: ['ES512']

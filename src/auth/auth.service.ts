@@ -28,9 +28,8 @@ export class AuthService {
 		if (user) {
 			const typeid = user.typeid;
 			const payload: UserJwtPayload = { username, typeid };
-			const privateKey = this.configService.get('JWT_PRIVATE_KEY_BASE64', '');
 			const accessToken: string = this.jwtService.sign(payload, {
-				secret: privateKey,
+				secret: this.configService.get('JWT_PRIVATE_KEY_BASE64', ''),
 				algorithm: 'ES512'
 			});
 			return { accessToken };

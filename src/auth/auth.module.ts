@@ -7,16 +7,11 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
 
-
 const jwtFactory = {
 	useFactory: async (configService: ConfigService) => {
-		let privateKey = configService.get<string>('JWT_PRIVATE_KEY_BASE64', '');
-		let publicKey = configService.get<string>('JWT_PUBLIC_KEY_BASE64', '');
-		//		let privateKey = configService.get<string>('JWT_SECRET', '');
-
 		return {
-			privateKey,
-			publicKey,
+			privateKey: configService.get<string>('JWT_PRIVATE_KEY_BASE64', ''),
+			publicKey: configService.get<string>('JWT_PUBLIC_KEY_BASE64', ''),
 			signOptions: {
 				expiresIn: configService.get('JWT_EXP_H'),
 			},
